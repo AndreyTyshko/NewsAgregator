@@ -69,6 +69,7 @@ dependencies {
     // xml
     implementation(libs.xmlutil.core)
     implementation(libs.xmlutil.serialization)
+    implementation ("com.squareup.retrofit2:converter-simplexml:2.9.0")
 
     // retrofit
     implementation(libs.retrofit2)
@@ -85,6 +86,7 @@ dependencies {
 
     // hilt
     implementation(libs.hilt.android)
+    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
     ksp(libs.hilt.compiler)
 
     // navigation

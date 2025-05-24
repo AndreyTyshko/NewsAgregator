@@ -7,20 +7,29 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModel
 import com.example.newsaggregator.data.rss.RssFeed
 import com.example.newsaggregator.ui.theme.NewsAggregatorTheme
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.MediaType
 import retrofit2.Retrofit
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.unit.dp
 
 private val retrofit = Retrofit.Builder()
     .baseUrl("https://www.theguardian.com")
@@ -31,7 +40,7 @@ private val retrofit = Retrofit.Builder()
     ).build()
 
 private val guardian = retrofit.create(RssFeed::class.java)
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,19 +48,19 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NewsAggregatorTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        text = "Press me!",
-                        modifier = Modifier.padding(innerPadding),
-                        guardian,
+
+                    ArticleScreen(
+                       // text = "Press me!",
+
+
                     )
-                }
+
             }
         }
     }
 }
 
-@Composable
+/*@Composable
 fun Greeting(
     text: String,
     modifier: Modifier = Modifier,
@@ -78,15 +87,27 @@ fun Greeting(
         )
 
     }
+}*/
+
+@Composable
+fun ArticleScreen(viewModel: ArticleViewModel = hiltViewModel()) {
+    val articles by viewModel.articles.collectAsState()
+
+    LazyColumn {
+        items(items = articles) { article ->
+
+            Text(article.title, modifier = Modifier.padding(8.dp))
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     NewsAggregatorTheme {
-        Greeting(
+        /*ArticleScreen(
             text = "Press me!",
             feed = guardian
-        )
+        )*/
     }
 }

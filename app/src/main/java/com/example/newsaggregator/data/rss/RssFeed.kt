@@ -16,11 +16,16 @@ import javax.inject.Singleton
 
 /*@MatchOrder
 @InstallIn(SingletonComponent::class)*/
-interface RssFeed {
+/*interface RssFeed {
     @GET("/{query}/rss")
     suspend fun getRss(
         @Path("query") query: String = "international"
     ): RssDto
+}*/
+
+interface RssFeed {
+    @GET("/rss")
+    suspend fun getRss(): RssDto
 }
 
 
